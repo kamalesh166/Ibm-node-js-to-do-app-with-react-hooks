@@ -1,0 +1,50 @@
+import React, { useState } from "react"; import "./App.css";
+
+function App() {
+const [todos, setTodos] = useState([]); const [input, setInput] = useState(""); const [editId, setEditId] = useState(null);
+
+const addTodo = () => { if (input.trim() !== "") { if (editId !== null) {
+// Edit existing task
+const updatedTodos = todos.map((todo, index) => index === editId ? input : todo
+);
+setTodos(updatedTodos); setEditId(null);
+} else {
+// Add new task setTodos([...todos, input]);
+}
+setInput("");
+}
+};
+
+const deleteTodo = (index) => {
+const newTodos = todos.filter((_, i) => i !== index); setTodos(newTodos);
+};
+const editTodo = (index) => { setInput(todos[index]); setEditId(index);
+};
+
+return (
+<div className="app">
+<h1>To-Do List</h1>
+<div className="todo-input">
+<input type="text"
+placeholder="Enter any To Do ..." value={input}
+onChange={(e) => setInput(e.target.value)}
+/>
+<button onClick={addTodo}>+</button>
+</div>
+<div className="todo-list">
+{todos.map((todo, index) => (
+<div key={index} className="todo-item">
+ 
+<span>{todo}</span>
+<div className="actions">
+<button onClick={() => editTodo(index)}>✏️</button>
+<button onClick={() => deleteTodo(index)}>🗑️</button>
+</div>
+</div>
+))}
+</div>
+</div>
+);
+}
+
+export default App;
